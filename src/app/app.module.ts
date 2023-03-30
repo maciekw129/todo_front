@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 const routes = [
   {
     path: '',
-    loadComponent: () => import('./features/todos/todo-list/todo-list.component')
+    loadChildren: () => import('./core/shell.module')
   }
 ]
 
