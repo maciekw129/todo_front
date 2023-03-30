@@ -6,6 +6,12 @@ const routes = [
   {
     path: '',
     component: ShellComponent,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('../features/todos/todo-list/todo-list.component')
+      }
+    ]
   }
 ]
 

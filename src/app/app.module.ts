@@ -4,21 +4,18 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { API_URL } from './core/env.token';
 import { environment } from 'src/environments/environment';
-
-const routes = [
-  {
-    path: '',
-    loadChildren: () => import('./core/shell.module')
-  }
-]
-
 @NgModule({
   declarations: [
     AppComponent,
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot([
+      {
+        path: '',
+        loadChildren: () => import('./core/shell.module')
+      }
+    ])
   ],
   providers: [{
     provide: API_URL,
