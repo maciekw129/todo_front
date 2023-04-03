@@ -24,4 +24,8 @@ export class TodosService {
       this._todos$$.next(response)
     })
   }
+
+  deleteTodo(todoId: string) {
+    return this.http.delete(this.API_URL + 'todo/' + todoId);
+  }
 }

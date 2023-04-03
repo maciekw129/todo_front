@@ -2,4 +2,11 @@
     <p>
         {{todo.todoDescription}}
     </p>
+    <ng-template pTemplate="footer">
+        <div class="flex justify-end gap-3 w-full">
+            <button pButton pRipple label="Done" class="p-button-rounded" icon="pi pi-check"></button>
+            <button pButton pRipple label="Delete" class="p-button-rounded p-button-warning" icon="pi pi-trash"
+                (click)="sendDeleteEvent(todo.id)"></button>
+        </div>
+    </ng-template>
 </p-card>
