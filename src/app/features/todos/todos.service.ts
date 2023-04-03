@@ -20,6 +20,7 @@ export class TodosService {
 
   getAllTodos() {
     this.http.get<TodoAPI[]>(this.API_URL + 'todo').subscribe(response => {
+      console.log(response);
       this._todos$$.next(response)
     })
   }

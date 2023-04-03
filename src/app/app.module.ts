@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { API_URL } from './core/env.token';
 import { environment } from 'src/environments/environment';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -15,7 +16,8 @@ import { environment } from 'src/environments/environment';
         path: '',
         loadChildren: () => import('./core/shell.module')
       }
-    ])
+    ]),
+    HttpClientModule
   ],
   providers: [{
     provide: API_URL,

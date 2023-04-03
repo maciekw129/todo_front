@@ -1,0 +1,5 @@
+<div class="flex flex-col items-center w-full gap-3 p-4">
+    <ng-container *ngIf="todos$$ | async as todos">
+        <app-todo *ngFor="let todo of todos" [todo]="todo" class="w-full max-w-xl" />
+    </ng-container>
+</div>
