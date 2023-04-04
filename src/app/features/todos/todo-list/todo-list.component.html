@@ -1,25 +1,17 @@
 <div class="flex flex-col items-center w-full gap-3 p-4">
     <ng-container *ngIf="todos$$ | async as todos">
         <app-todo *ngFor="let todo of todos" class="w-full max-w-xl" [todo]="todo"
-            (deleteTodoEvent)="confirmDelete($event)" />
+            (deleteTodoEvent)="showSuccessDeleteTodo()" />
     </ng-container>
 
-    <p-confirmDialog #cd [style]="{width: '50vw', maxWidth: '700px'}">
-        <ng-template pTemplate="header">
-            <h3 class="font-bold">Confirm delete</h3>
-        </ng-template>
-        <ng-template pTemplate="footer">
-            <button pButton icon="pi pi-check" label="Yes" class="p-button-rounded p-button-warning"
-                (click)="cd.accept()"></button>
-            <button pButton icon="pi pi-times" label="No" class="p-button-rounded" (click)="cd.reject()"></button>
-        </ng-template>
-    </p-confirmDialog>
-
-    <p-toast></p-toast>
-
     <button pButton pRipple (click)="showForm()" icon="pi pi-plus" class="p-button-rounded"></button>
+
     <p-dialog header="Create todo" [(visible)]="isFormVisible" [modal]="true" [style]="{width: '50vw'}"
         [maximizable]="true" [draggable]="false" [resizable]="false">
-        <app-todo-form (submitFormEvent)="addTodo($event)"></app-todo-form>
+        <ng-container *ngIf="addTodoLoader$$ | async as addTodoLoader">
+            <app-todo-form (submitFormEvent)="addTodo($event)" [loaderState]="addTodoLoader"></app-todo-form>
+        </ng-container>
     </p-dialog>
 </div>
+
+<p-toast></p-toast>

@@ -1,1 +1,4 @@
-<p>loader works!</p>
+<p-progressSpinner [style]="{width: '35px', height: '35px'}"
+    *ngIf="loaderState.status === 'pending'"></p-progressSpinner>
+<p *ngIf="loaderState.status === 'rejected' && loaderState.rejectedMessage">{{ loaderState.rejectedMessage }}</p>
+<p *ngIf="loaderState.status === 'success' && loaderState.successMessage">{{ loaderState.successMessage }}</p>

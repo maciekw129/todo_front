@@ -1,24 +1,40 @@
-import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { TodoAPI } from '../todos.interface';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
+import { ConfirmationService } from 'primeng/api';
+import { TodoStatefulService } from './todo-stateful.service';
+import { LoaderComponent } from 'src/app/shared/loader/loader.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-todo[todo]',
   standalone: true,
-  imports: [DatePipe, CardModule, ButtonModule, RippleModule],
+  imports: [DatePipe, CardModule, ButtonModule, RippleModule, LoaderComponent, NgIf, AsyncPipe, ConfirmDialogModule],
   templateUrl: './todo.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: []
+  providers: [ConfirmationService, TodoStatefulService]
 })
 export class TodoComponent {
-
   @Input() todo!: TodoAPI;
-  @Output() deleteTodoEvent = new EventEmitter<string>;
+  @Output() deleteTodoEvent = new EventEmitter<void>;
 
-  sendDeleteEvent(todoId: string) {
-    this.deleteTodoEvent.emit(todoId);
+  private todoStatefulService = inject(TodoStatefulService);
+  private confirmationService = inject(ConfirmationService);
+
+  deleteTodoLoader$$ = this.todoStatefulService.selectDeleteTodoLoader().pipe(
+    tap(({ status }) => {
+      if(status === 'success') this.deleteTodoEvent.emit();
+    })
+  );
+
+  deleteTodo() {
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to delete this todo?',
+      accept: () => this.todoStatefulService.deleteTodo(this.todo.id)
+    });
   }
 }

@@ -17,7 +17,7 @@ export class TodosAPIService {
   }
 
   postTodo(todo: TodoPayload) {
-    return this.http.post(this.API_URL_TODO, todo);
+    return this.http.post<TodoAPI>(this.API_URL_TODO, todo);
   }
 
   deleteTodo(todoId: string) {

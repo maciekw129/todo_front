@@ -4,18 +4,18 @@ import { TodoComponent } from '../todo/todo.component';
 import { TodosStatefulService } from '../todos-stateful.service';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TodoPayload } from '../todos.interface';
-import { TodosAPIService } from '../todos-api.service';
+import { LoaderComponent } from 'src/app/shared/loader/loader.component';
+import { distinctUntilKeyChanged, tap } from 'rxjs';
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgIf, NgFor, TodoComponent, ToastModule, ConfirmDialogModule, DialogModule, ButtonModule, RippleModule, TodoFormComponent],
+  imports: [AsyncPipe, NgIf, NgFor, TodoComponent, ToastModule, DialogModule, ButtonModule, RippleModule, TodoFormComponent, LoaderComponent],
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,43 +23,35 @@ import { TodosAPIService } from '../todos-api.service';
 })
 export default class TodoListComponent implements OnInit {
   private todosStatefulService = inject(TodosStatefulService);
-  private todosApiService = inject(TodosAPIService);
   private messageService = inject(MessageService);
-  private confirmationService = inject(ConfirmationService);
   
-  todos$$ = this.todosStatefulService.todos$$;
   isFormVisible = false;
+  todos$$ = this.todosStatefulService.selectTodos$$;
+  getAllTodosLoader$$ = this.todosStatefulService.selectGetAllTodosLoader$$;
+  addTodoLoader$$ = this.todosStatefulService.selectAddTodoLoader$$.pipe(
+    distinctUntilKeyChanged(('status')),
+    tap(({ status }) => {
+      if(status === 'success') this.showSuccessAddTodo();
+      if(status === 'rejected') this.showRejectionMessage();
+    })
+  );
 
   ngOnInit() {
-      this.fetchAllTodos();
-  }
-
-  private fetchAllTodos() {
     this.todosStatefulService.fetchAllTodos();
   }
   
-  private successDeleteTodo() {
-    this.messageService.add({severity: 'success', summary: 'Success', detail: 'You successfully deleted todo.'});
-  }
-
-  private successAddTodo() {
+  private showSuccessAddTodo() {
     this.messageService.add({severity: 'success', summary: 'Success', detail: 'You successfully added todo.'});
+    this.hideForm();
   }
-
-  private rejectionMessage() {
+  
+  private showRejectionMessage() {
     this.messageService.add({severity: 'error', summary: 'Error', detail: 'Something went wrong.'})
   }
-
-  private deleteTodo(todoId: string) {
-    this.todosApiService.deleteTodo(todoId).subscribe({
-      next: () => {
-        this.successDeleteTodo();
-        this.fetchAllTodos();
-      },
-      error: () => {
-        this.rejectionMessage();
-      }
-    })
+  
+  showSuccessDeleteTodo() {
+    this.messageService.add({severity: 'success', summary: 'Success', detail: 'You successfully deleted todo.'});
+    this.hideForm();
   }
 
   showForm() {
@@ -71,25 +63,6 @@ export default class TodoListComponent implements OnInit {
   }
 
   addTodo(todo: TodoPayload) {
-    this.todosApiService.postTodo(todo).subscribe({
-      next: () => {
-        this.successAddTodo();
-        this.fetchAllTodos();
-        this.hideForm();
-      } ,
-      error: () => {
-        this.rejectionMessage();
-      }
-    })
+    this.todosStatefulService.addTodo(todo);
   }
-
-  confirmDelete(todoId: string) {
-    this.confirmationService.confirm({
-        message: 'Are you sure that you want to delete this todo?',
-        accept: () => {
-            this.deleteTodo(todoId);
-        }
-    });
-  }
-
 }

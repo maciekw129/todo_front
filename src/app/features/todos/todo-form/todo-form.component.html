@@ -11,5 +11,7 @@
         <label for="todo-description">Description</label>
     </span>
 
-    <button pButton label="Send"></button>
+    <button pButton label="Send" [disabled]="loaderState.status === 'pending'"></button>
+
+    <app-loader [loaderState]="loaderState"></app-loader>
 </form>
