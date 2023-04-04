@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { TodoAPI } from '../todos.interface';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';

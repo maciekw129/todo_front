@@ -9,10 +9,12 @@ import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
+import { TodoFormComponent } from '../todo-form/todo-form.component';
+import { TodoPayload } from '../todos.interface';
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgIf, NgFor, TodoComponent, ToastModule, ConfirmDialogModule, DialogModule, ButtonModule, RippleModule],
+  imports: [AsyncPipe, NgIf, NgFor, TodoComponent, ToastModule, ConfirmDialogModule, DialogModule, ButtonModule, RippleModule, TodoFormComponent],
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,16 +29,45 @@ export default class TodoListComponent implements OnInit {
   isFormVisible = false;
 
   ngOnInit() {
-      this.todosService.getAllTodos();
+      this.getAllTodos();
   }
 
+  private getAllTodos() {
+    this.todosService.getAllTodos();
+  }
+  
   private successDeleteTodo() {
-    this.messageService.add({severity:'success', summary:'Success', detail:'You successfully deleted todo.'});
+    this.messageService.add({severity: 'success', summary: 'Success', detail: 'You successfully deleted todo.'});
+  }
+
+  private successAddTodo() {
+    this.messageService.add({severity: 'success', summary: 'Success', detail: 'You successfully added todo.'});
   }
 
   private deleteTodo(todoId: string) {
     this.todosService.deleteTodo(todoId).subscribe({
-      next: () => this.successDeleteTodo()
+      next: () => {
+        this.successDeleteTodo();
+        this.getAllTodos();
+      } 
+    })
+  }
+
+  showForm() {
+    this.isFormVisible = true;
+  }
+
+  hideForm() {
+    this.isFormVisible = false;
+  }
+
+  addTodo(todo: TodoPayload) {
+    this.todosService.postTodo(todo).subscribe({
+      next: () => {
+        this.successAddTodo();
+        this.getAllTodos();
+        this.hideForm();
+      } 
     })
   }
 
@@ -49,7 +80,4 @@ export default class TodoListComponent implements OnInit {
     });
   }
 
-  showForm() {
-    this.isFormVisible = true;
-  }
 }

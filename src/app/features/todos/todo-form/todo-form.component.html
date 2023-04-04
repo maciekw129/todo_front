@@ -1,0 +1,15 @@
+<form [formGroup]="todoForm" (ngSubmit)="submitForm()"
+    class="p-4 flex flex-col gap-y-4 w-full max-w-md items-center justify-center m-auto">
+    <span class="p-float-label w-full max-w-md">
+        <input id="todo-name" formControlName="todoName" class="w-full" type="text" pInputText />
+        <label for="todo-name">Name</label>
+    </span>
+
+    <span class="p-float-label w-full max-w-md">
+        <textarea id="todo-description" formControlName="todoDescription" class="w-full" rows="5" cols="30"
+            pInputTextarea></textarea>
+        <label for="todo-description">Description</label>
+    </span>
+
+    <button pButton label="Send"></button>
+</form>
