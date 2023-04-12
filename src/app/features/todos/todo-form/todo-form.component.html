@@ -1,17 +1,44 @@
 <form [formGroup]="todoForm" (ngSubmit)="submitForm()"
     class="p-4 flex flex-col gap-y-4 w-full max-w-md items-center justify-center m-auto">
-    <span class="p-float-label w-full max-w-md">
-        <input id="todo-name" formControlName="todoName" class="w-full" type="text" pInputText />
-        <label for="todo-name">Name</label>
-    </span>
+    <div class="field min-w-full">
+        <label for="todo-name" class="block">Name</label>
+        <input id="todo-name" formControlName="todoName" class="w-full" type="text" pInputText errorHandler />
+        <ng-container *ngIf="todoNameCtrl.touched">
+            <ng-container *ngIf="todoNameCtrl.errors as errors">
+                <small class="p-error block" *ngIf="errors['required']; else minLength">This field is required.</small>
+                <ng-template #minLength>
+                    <small class="p-error block" *ngIf="errors['minlength'] as error; else maxLength">Name must have at
+                        least
+                        {{error.actualLength}}/{{ error.requiredLength }} characters.</small>
+                </ng-template>
+                <ng-template #maxLength>
+                    <small class="p-error block" *ngIf="errors['maxlength'] as error">Name can have max. {{
+                        error.requiredLength }}/{{error.actualLength}}</small>
+                </ng-template>
+            </ng-container>
+        </ng-container>
+    </div>
 
-    <span class="p-float-label w-full max-w-md">
+    <div class="field min-w-full">
+        <label for="todo-description" class="block">Description</label>
         <textarea id="todo-description" formControlName="todoDescription" class="w-full" rows="5" cols="30"
-            pInputTextarea></textarea>
-        <label for="todo-description">Description</label>
-    </span>
-
-    <button pButton label="Send" [disabled]="loaderState.status === 'pending'"></button>
+            pInputTextarea errorHandler></textarea>
+        <ng-container *ngIf="todoDescriptionCtrl.touched">
+            <ng-container *ngIf="todoDescriptionCtrl.errors as errors">
+                <small class="p-error block" *ngIf="errors['required']; else minLength">This field is required.</small>
+                <ng-template #minLength>
+                    <small class="p-error block" *ngIf="errors['minlength'] as error; else maxLength">Name must have at
+                        least
+                        {{error.actualLength}}/{{ error.requiredLength }} characters.</small>
+                </ng-template>
+                <ng-template #maxLength>
+                    <small class="p-error block" *ngIf="errors['maxlength'] as error">Name can have max. {{
+                        error.requiredLength }}/{{error.actualLength}}</small>
+                </ng-template>
+            </ng-container>
+        </ng-container>
+    </div>
+    <button pButton label="Send" [disabled]="loaderState.status === 'pending' || todoForm.invalid"></button>
 
     <app-loader [loaderState]="loaderState"></app-loader>
 </form>

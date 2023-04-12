@@ -2,16 +2,17 @@ import { Component, EventEmitter, inject, Output, Input } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
-import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TodoForm, TodoPayload } from '../todos.interface';
 import { LoaderState } from 'src/app/shared/loader/loader.interface';
 import { NgIf } from '@angular/common';
 import { LoaderComponent } from 'src/app/shared/loader/loader.component';
+import { ErrorHandlerDirective } from 'src/app/shared/directives/error-handler.directive';
 
 @Component({
   selector: 'app-todo-form',
   standalone: true,
-  imports: [InputTextModule, InputTextareaModule, ButtonModule, ReactiveFormsModule, NgIf, LoaderComponent],
+  imports: [InputTextModule, InputTextareaModule, ButtonModule, ReactiveFormsModule, NgIf, LoaderComponent, ErrorHandlerDirective],
   templateUrl: './todo-form.component.html'
 })
 export class TodoFormComponent {
@@ -32,8 +33,12 @@ export class TodoFormComponent {
 
   private createForm() {
     return this.fb.group<TodoForm>({
-      todoName: this.fb.control(''),
-      todoDescription: this.fb.control('')
+      todoName: this.fb.control('', {
+        validators: [Validators.required, Validators.minLength(3), Validators.maxLength(50)]
+      }),
+      todoDescription: this.fb.control('', {
+        validators: [Validators.required, Validators.minLength(3), Validators.maxLength(255)]
+      })
     });
   }
 
