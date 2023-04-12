@@ -30,6 +30,23 @@ export class TodoStatefulService {
     return this.todoState$$.pipe(map(state => state.deleteTodoLoader));
   }
 
+  selectCompleteTodoLoader() {
+    return this.todoState$$.pipe(map(state => state.completeTodoLoader));
+  }
+
+  completeTodo(todoId: string) {
+    this.patchState({ completeTodoLoader: { status: 'pending' }});
+
+    this.todosApiService.patchTodo(todoId, { completed: true }).subscribe({
+      next: () => {
+        this.patchState({ completeTodoLoader: { status: 'success' }});
+      },
+      error: () => {
+        this.patchState({ deleteTodoLoader: { status: 'rejected' }});
+      }
+    })
+  }
+
   deleteTodo(todoId: string) {
     this.patchState({ deleteTodoLoader: { status: 'pending' }});
 
