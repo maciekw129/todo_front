@@ -11,11 +11,19 @@ export class TodoStatefulService {
   private todosStatefulService = inject(TodosStatefulService);
 
   private _todoState$$ = new BehaviorSubject<TodoState>({
-    deleteTodoLoader: { status: 'initial' }
+    deleteTodoLoader: { status: 'initial' },
+    completeTodoLoader: { status: 'initial' }
   })
 
   get todoState$$() {
     return this._todoState$$.asObservable();
+  }
+
+  private patchState(stateSlice: Partial<TodoState>) {
+    this._todoState$$.next({
+      ...this._todoState$$.value,
+      ...stateSlice
+    })
   }
 
   selectDeleteTodoLoader() {
@@ -23,15 +31,15 @@ export class TodoStatefulService {
   }
 
   deleteTodo(todoId: string) {
-    this._todoState$$.next({ deleteTodoLoader: { status: 'pending' }});
+    this.patchState({ deleteTodoLoader: { status: 'pending' }});
 
     this.todosApiService.deleteTodo(todoId).subscribe({
       next: () => {
-        this._todoState$$.next({ deleteTodoLoader: { status: 'success' }});
+        this.patchState({ deleteTodoLoader: { status: 'success' }});
         this.todosStatefulService.deleteTodoFromState(todoId);
       },
       error: () => {
-        this._todoState$$.next({ deleteTodoLoader: { status: 'rejected' }});
+        this.patchState({ deleteTodoLoader: { status: 'rejected' }});
       }
     })
   }

@@ -4,17 +4,19 @@ import { LoaderState } from "src/app/shared/loader/loader.interface"
 export interface TodosState {
     todos: TodoAPI[],
     getAllTodosLoader: LoaderState,
-    addTodoLoader: LoaderState,
+    addTodoLoader: LoaderState
 }
 
 export interface TodoState {
-    deleteTodoLoader: LoaderState
+    deleteTodoLoader: LoaderState,
+    completeTodoLoader: LoaderState
 }
 
 export interface TodoAPI {
     id: string,
     todoName: string,
     todoDescription: string,
+    completed: boolean,
     createdDate: Date
 }
 
@@ -25,5 +27,9 @@ export interface TodoForm {
 
 export interface TodoPayload {
     todoName: string,
-    todoDescription: string
+    todoDescription: string,
+}
+
+export interface TodoPatchPayload extends TodoPayload {
+    completed: boolean
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { API_URL } from 'src/app/core/env.token';
-import { TodoAPI, TodoPayload } from './todos.interface';
+import { TodoAPI, TodoPatchPayload, TodoPayload } from './todos.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +22,9 @@ export class TodosAPIService {
 
   deleteTodo(todoId: string) {
     return this.http.delete(this.API_URL_TODO + '/' + todoId);
+  }
+
+  patchTodo(todoId: string, partialTodo: Partial<TodoPatchPayload>) {
+    return this.http.patch<TodoAPI>(this.API_URL_TODO + '/' + todoId, partialTodo);
   }
 }
