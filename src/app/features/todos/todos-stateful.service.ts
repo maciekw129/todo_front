@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs'
+import { BehaviorSubject, map, tap } from 'rxjs'
 import { TodoAPI, TodoPayload, TodosState } from './todos.interface';
 import { TodosAPIService } from './todos-api.service';
 
@@ -11,7 +11,7 @@ export class TodosStatefulService {
   private todosApiService = inject(TodosAPIService);
 
   private _todosState$$ = new BehaviorSubject<TodosState>({
-    todos: [],
+    todos: new Map<string, TodoAPI>(),
     getAllTodosLoader: { status: 'initial'},
     addTodoLoader: { status: 'initial' }
   })
@@ -32,6 +32,10 @@ export class TodosStatefulService {
     return this._todosState$$.pipe(map(state => state.addTodoLoader));
   }
 
+  private getTodosMap() {
+    return this._todosState$$.value.todos;
+  }
+
   private patchState(stateSlice: Partial<TodosState>) {
     this._todosState$$.next({
       ...this._todosState$$.value,
@@ -42,10 +46,14 @@ export class TodosStatefulService {
   fetchAllTodos() {
     this.patchState({ getAllTodosLoader: { status: 'pending' }});
 
-    this.todosApiService.getTodos().subscribe({
+    this.todosApiService.getTodos()
+    .subscribe({
       next: (result) => {
+        result.forEach(todo => {
+          this.getTodosMap().set(todo.id, todo);
+        })
+
         this.patchState({
-          todos: result,
           getAllTodosLoader: { status: 'success' }
         });
       },
@@ -61,18 +69,25 @@ export class TodosStatefulService {
     this.todosApiService.postTodo(todo).subscribe({
       next: (result) => {
         this.patchState({
-          todos: [...this._todosState$$.value.todos, result],
+          todos: this.getTodosMap().set(result.id, result),
           addTodoLoader: { status: 'success'}
         })
       },
       error: () => {
-        this.patchState({ addTodoLoader: {status: 'rejected' }});
+        this.patchState({ addTodoLoader: { status: 'rejected' }});
       }
     })
   }
 
+  completeTodoInState(todoId: string) {
+    const todo = this.getTodosMap().get(todoId);
+
+    if(todo) {
+      this.getTodosMap().set(todoId, { ...todo, completed: true });
+    }
+  }
+
   deleteTodoFromState(todoId: string) {
-    const filteredTodos = this._todosState$$.value.todos.filter(({ id }) => id !== todoId);
-    this.patchState({ todos: filteredTodos });
+    this.getTodosMap().delete(todoId);
   }
 }

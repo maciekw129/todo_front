@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { TodoComponent } from '../todo/todo.component';
 import { TodosStatefulService } from '../todos-stateful.service';
@@ -15,7 +15,7 @@ import { distinctUntilKeyChanged, tap } from 'rxjs';
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgIf, NgFor, TodoComponent, ToastModule, DialogModule, ButtonModule, RippleModule, TodoFormComponent, LoaderComponent],
+  imports: [AsyncPipe, NgIf, NgFor, TodoComponent, ToastModule, DialogModule, ButtonModule, RippleModule, TodoFormComponent, LoaderComponent, KeyValuePipe],
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

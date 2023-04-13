@@ -2,7 +2,7 @@ import { FormControl } from "@angular/forms"
 import { LoaderState } from "src/app/shared/loader/loader.interface"
 
 export interface TodosState {
-    todos: TodoAPI[],
+    todos: Map<string, TodoAPI>,
     getAllTodosLoader: LoaderState,
     addTodoLoader: LoaderState
 }

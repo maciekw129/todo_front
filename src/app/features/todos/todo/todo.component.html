@@ -7,7 +7,8 @@
             <ng-container *ngIf="deleteTodoLoader$$ | async as deleteTodoLoader">
                 <app-loader [loaderState]="deleteTodoLoader"></app-loader>
             </ng-container>
-            <button pButton pRipple label="Done" class="p-button-rounded" icon="pi pi-check"></button>
+            <button pButton pRipple label="Done" class="p-button-rounded" icon="pi pi-check"
+                (click)="completeTodo()"></button>
             <button pButton pRipple label="Delete" class="p-button-rounded p-button-warning" icon="pi pi-trash"
                 (click)="deleteTodo()"></button>
         </div>
@@ -16,7 +17,7 @@
 
 <p-confirmDialog #cd [style]="{width: '50vw'}">
     <ng-template pTemplate="header">
-        <h3 class="font-bold">Confirm deletion</h3>
+        <h3 class="font-bold">Confirm</h3>
     </ng-template>
     <ng-template pTemplate="footer">
         <button pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
