@@ -20,34 +20,46 @@ import { tap } from 'rxjs';
 })
 export class TodoComponent {
   @Input() todo!: TodoAPI;
-  @Output() deleteTodoEvent = new EventEmitter<void>;
-  @Output() completeTodoEvent = new EventEmitter<void>;
+
+  @Output() deleteTodoEvent = new EventEmitter<string>;
+  @Output() completeTodoEvent = new EventEmitter<string>;
+  @Output() errorEvent = new EventEmitter<void>;
 
   private todoStatefulService = inject(TodoStatefulService);
   private confirmationService = inject(ConfirmationService);
 
   deleteTodoLoader$$ = this.todoStatefulService.selectDeleteTodoLoader().pipe(
     tap(({ status }) => {
-      if(status === 'success') this.deleteTodoEvent.emit();
+      if(status === 'success') this.deleteTodoEvent.emit(this.todo.id);
+      if(status === 'rejected') this.errorEvent.emit();
     })
   );
   completeTodoLoader$$ = this.todoStatefulService.selectCompleteTodoLoader().pipe(
     tap(({ status }) => {
-      if(status === 'success') this.completeTodoEvent.emit();
+      if(status === 'success')  this.completeTodoEvent.emit(this.todo.id);
+      if(status === 'rejected') this.errorEvent.emit();
     })
   )
 
-  deleteTodo() {
+  private deleteTodo() {
+    this.todoStatefulService.deleteTodo(this.todo.id);
+  }
+
+  private completeTodo() {
+    this.todoStatefulService.completeTodo(this.todo.id);
+  }
+
+  confirmDeleteTodo() {
     this.confirmationService.confirm({
       message: 'Are you sure that you want to delete this todo?',
-      accept: () => this.todoStatefulService.deleteTodo(this.todo.id)
+      accept: () => this.deleteTodo()
     });
   }
 
-  completeTodo() {
+  confirmCompleteTodo() {
     this.confirmationService.confirm({
       message: 'Are you sure that you want to complete this todo?',
-      accept: () => this.todoStatefulService.completeTodo(this.todo.id)
+      accept: () => this.completeTodo()
     });
   }
 }

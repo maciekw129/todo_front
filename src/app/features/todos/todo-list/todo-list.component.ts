@@ -45,13 +45,28 @@ export default class TodoListComponent implements OnInit {
     this.hideForm();
   }
   
-  private showRejectionMessage() {
-    this.messageService.add({severity: 'error', summary: 'Error', detail: 'Something went wrong.'})
-  }
-  
-  showSuccessDeleteTodo() {
+  private showSuccessDeleteTodo() {
     this.messageService.add({severity: 'success', summary: 'Success', detail: 'You successfully deleted todo.'});
     this.hideForm();
+  }
+  
+  private showSuccessCompleteTodo() {
+    this.messageService.add({severity: 'success', summary: 'Success', detail: 'You successfully completed todo!'})
+  }
+
+  showRejectionMessage() {
+    this.messageService.add({severity: 'error', summary: 'Error', detail: 'Something went wrong.'})
+  }
+
+  handleDeleteTodoEvent(todoId: string) {
+    this.todosStatefulService.deleteTodoFromState(todoId);
+    this.showSuccessDeleteTodo();
+  }
+
+  handleCompleteTodoEvent(todoId: string) {
+    console.log('asdasd')
+    this.todosStatefulService.completeTodoInState(todoId);
+    this.showSuccessCompleteTodo();
   }
 
   showForm() {

@@ -4,13 +4,14 @@
     </p>
     <ng-template pTemplate="footer">
         <div class="flex justify-end gap-3 w-full">
-            <ng-container *ngIf="deleteTodoLoader$$ | async as deleteTodoLoader">
-                <app-loader [loaderState]="deleteTodoLoader"></app-loader>
+            <ng-container *ngIf="completeTodoLoader$$ | async as completeTodoLoader">
+                <button [loading]="completeTodoLoader.status === 'pending'" pButton pRipple label="Done"
+                    class="p-button-rounded" icon="pi pi-check" (click)="confirmCompleteTodo()"></button>
             </ng-container>
-            <button pButton pRipple label="Done" class="p-button-rounded" icon="pi pi-check"
-                (click)="completeTodo()"></button>
-            <button pButton pRipple label="Delete" class="p-button-rounded p-button-warning" icon="pi pi-trash"
-                (click)="deleteTodo()"></button>
+            <ng-container *ngIf="deleteTodoLoader$$ | async as deleteTodoLoader">
+                <button [loading]="deleteTodoLoader.status === 'pending'" pButton pRipple label="Delete"
+                    class="p-button-rounded p-button-warning" icon="pi pi-trash" (click)="confirmDeleteTodo()"></button>
+            </ng-container>
         </div>
     </ng-template>
 </p-card>

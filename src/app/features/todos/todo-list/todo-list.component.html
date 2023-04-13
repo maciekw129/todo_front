@@ -1,7 +1,8 @@
 <div class="flex flex-col items-center w-full gap-3 p-4">
     <ng-container *ngIf="todos$$ | async as todos">
         <app-todo *ngFor="let todo of todos | keyvalue" class="w-full max-w-xl" [todo]="todo.value"
-            (deleteTodoEvent)="showSuccessDeleteTodo()" />
+            (deleteTodoEvent)="handleDeleteTodoEvent($event)" (completeTodoEvent)="handleCompleteTodoEvent($event)"
+            (errorEvent)="showRejectionMessage()" />
     </ng-container>
 
     <button pButton pRipple (click)="showForm()" icon="pi pi-plus" class="p-button-rounded"></button>
