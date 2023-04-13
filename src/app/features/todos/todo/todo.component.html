@@ -3,11 +3,15 @@
         {{todo.todoDescription}}
     </p>
     <ng-template pTemplate="footer">
-        <div class="flex justify-end gap-3 w-full">
-            <ng-container *ngIf="completeTodoLoader$$ | async as completeTodoLoader">
-                <button [loading]="completeTodoLoader.status === 'pending'" pButton pRipple label="Done"
-                    class="p-button-rounded" icon="pi pi-check" (click)="confirmCompleteTodo()"></button>
-            </ng-container>
+        <div class="flex justify-end items-center gap-3 w-full">
+            <p class="font-bold" *ngIf="todo.completed; else completeButton">You have already completed this todo.</p>
+            <ng-template #completeButton>
+                <ng-container *ngIf="completeTodoLoader$$ | async as completeTodoLoader">
+                    <button [loading]="completeTodoLoader.status === 'pending'" pButton pRipple label="Done"
+                        class="p-button-rounded" icon="pi pi-check" (click)="confirmCompleteTodo()"></button>
+                </ng-container>
+            </ng-template>
+
             <ng-container *ngIf="deleteTodoLoader$$ | async as deleteTodoLoader">
                 <button [loading]="deleteTodoLoader.status === 'pending'" pButton pRipple label="Delete"
                     class="p-button-rounded p-button-warning" icon="pi pi-trash" (click)="confirmDeleteTodo()"></button>

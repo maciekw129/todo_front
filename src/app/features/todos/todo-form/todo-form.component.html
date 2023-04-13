@@ -9,11 +9,11 @@
                 <ng-template #minLength>
                     <small class="p-error block" *ngIf="errors['minlength'] as error; else maxLength">Name must have at
                         least
-                        {{error.actualLength}}/{{ error.requiredLength }} characters.</small>
+                        {{ error.requiredLength }} characters.</small>
                 </ng-template>
                 <ng-template #maxLength>
                     <small class="p-error block" *ngIf="errors['maxlength'] as error">Name can have max. {{
-                        error.requiredLength }}/{{error.actualLength}}</small>
+                        error.requiredLength }}</small>
                 </ng-template>
             </ng-container>
         </ng-container>
@@ -29,11 +29,11 @@
                 <ng-template #minLength>
                     <small class="p-error block" *ngIf="errors['minlength'] as error; else maxLength">Name must have at
                         least
-                        {{error.actualLength}}/{{ error.requiredLength }} characters.</small>
+                        {{ error.requiredLength }} characters.</small>
                 </ng-template>
                 <ng-template #maxLength>
                     <small class="p-error block" *ngIf="errors['maxlength'] as error">Name can have max. {{
-                        error.requiredLength }}/{{error.actualLength}}</small>
+                        error.requiredLength }}</small>
                 </ng-template>
             </ng-container>
         </ng-container>
