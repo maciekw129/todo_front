@@ -17,3 +17,11 @@ a {
 router-outlet+* {
     width: 100%;
 }
+
+.p-error {
+    display: block;
+}
+
+app-text-input {
+    width: 100%;
+}

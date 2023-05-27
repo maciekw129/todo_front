@@ -5,6 +5,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TextInputComponent } from 'src/app/shared/forms/text-input/text-input.component';
+import { confirmPasswordValidator, emailValidator, passwordValidator } from 'src/app/shared/forms/validators/common-validators';
 
 @Component({
   selector: 'app-register-form',
@@ -20,26 +21,32 @@ export class RegisterFormComponent {
 
   registerForm = this.createForm();
 
-  get emailCtrl() {
-    return this.registerForm.controls.email;
-  }
-
-  get passwordCtrl() {
-    return this.registerForm.controls.password;
-  }
-
   private createForm() {
     return this.fb.group<RegisterForm>({
-      email: this.fb.control(''),
-      password: this.fb.control(''),
-      firstname: this.fb.control('', {validators: Validators.required}),
-      lastname: this.fb.control('')
+      email: this.fb.control('', {
+        validators: [
+          Validators.required,
+          emailValidator()
+        ]
+      }),
+      password: this.fb.control('', {
+        validators: [
+          Validators.required,
+          passwordValidator()
+        ]
+      }),
+      confirmPassword: this.fb.control('', {
+        validators: Validators.required
+      }),
+      firstname: this.fb.control('', {
+        validators: Validators.required
+      }),
+      lastname: this.fb.control('', {
+        validators: Validators.required
+      })
+    }, {
+      validators: confirmPasswordValidator()
     })
-  }
-
-  ngOnInit() {
-    // this.registerForm.controls.firstname.valueChanges.subscribe(console.log);
-    // this.registerForm.controls.email.valueChanges.subscribe(console.log);
   }
 
   submitForm() {

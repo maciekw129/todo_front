@@ -36,6 +36,7 @@ export interface LoginForm {
 export interface RegisterForm {
     email: FormControl<string>,
     password: FormControl<string>,
+    confirmPassword: FormControl<string>,
     firstname: FormControl<string>,
     lastname: FormControl<string>
 }
