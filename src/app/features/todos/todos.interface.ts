@@ -12,6 +12,12 @@ export interface TodoState {
     completeTodoLoader: LoaderState
 }
 
+export interface TodosAPIResponse {
+    content: TodoAPI[],
+    totalPages: number,
+    last: boolean
+}
+
 export interface TodoAPI {
     id: string,
     todoName: string,

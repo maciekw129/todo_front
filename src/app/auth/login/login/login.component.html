@@ -1,0 +1,10 @@
+<div class="w-screen h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded flex items-center justify-center flex-col shadow">
+        <h2 class="font-bold text-xl">Login</h2>
+        <app-login-form (submitFormEvent)="login($event)"></app-login-form>
+        <ng-container *ngIf="authLoader$$ | async as authLoader">
+            <app-loader class="mb-1" [loaderState]="authLoader"></app-loader>
+        </ng-container>
+        <p class="text-sm">You don't have account? <a routerLink="/register">Sign up!</a></p>
+    </div>
+</div>

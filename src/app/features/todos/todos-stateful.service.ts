@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, map, tap } from 'rxjs'
+import { BehaviorSubject, map } from 'rxjs'
 import { TodoAPI, TodoPayload, TodosState } from './todos.interface';
 import { TodosAPIService } from './todos-api.service';
 
@@ -48,8 +48,8 @@ export class TodosStatefulService {
 
     this.todosApiService.getTodos()
     .subscribe({
-      next: (result) => {
-        result.forEach(todo => {
+      next: ({ content }) => {
+        content.forEach(todo => {
           this.getTodosMap().set(todo.id, todo);
         })
 

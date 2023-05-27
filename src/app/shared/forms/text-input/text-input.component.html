@@ -1,0 +1,20 @@
+<div class="field min-w-full">
+    <label for="text-input" class="block">{{ label }}</label>
+    <input id="text-input" [formControl]="control" (input)="handleChange()" (blur)="onTouched()" class=" w-full"
+        type="text" pInputText errorHandler />
+    <ng-container *ngIf="control.touched">
+        <ng-container *ngIf="control.errors as errors">
+            <small class="p-error block" *ngIf="errors['required']; else minLength">This field is required.</small>
+            <ng-template #minLength>
+                <small class="p-error block" *ngIf="errors['minlength'] as error; else maxLength">Name must have at
+                    least
+                    {{ error.requiredLength }} characters.</small>
+            </ng-template>
+            <ng-template #maxLength>
+                <small class="p-error block" *ngIf="errors['maxlength'] as error">Name can have max. {{
+                    error.requiredLength }}</small>
+            </ng-template>
+            <ng-content></ng-content>
+        </ng-container>
+    </ng-container>
+</div>
