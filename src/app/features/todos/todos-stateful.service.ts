@@ -1,46 +1,35 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs'
+import { map } from 'rxjs'
 import { TodoAPI, TodoPayload, TodosState } from './todos.interface';
 import { TodosAPIService } from './todos-api.service';
+import { StatefulService } from 'src/app/shared/services/stateful-service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
-export class TodosStatefulService {
+@Injectable()
+export class TodosStatefulService extends StatefulService<TodosState> {
   private todosApiService = inject(TodosAPIService);
 
-  private _todosState$$ = new BehaviorSubject<TodosState>({
-    todos: new Map<string, TodoAPI>(),
-    getAllTodosLoader: { status: 'initial'},
-    addTodoLoader: { status: 'initial' }
-  })
-
-  get todosState$$() {
-    return this._todosState$$.asObservable();
+  constructor() {
+    super({
+      todos: new Map<string, TodoAPI>(),
+      getAllTodosLoader: { status: 'initial'},
+      addTodoLoader: { status: 'initial' }
+    })
   }
 
   get selectTodos$$() {
-    return this._todosState$$.pipe(map(state => state.todos));
+    return this._state$$.pipe(map(state => state.todos));
   }
 
   get selectGetAllTodosLoader$$() {
-    return this._todosState$$.pipe(map(state => state.getAllTodosLoader));
+    return this._state$$.pipe(map(state => state.getAllTodosLoader));
   }
 
   get selectAddTodoLoader$$() {
-    return this._todosState$$.pipe(map(state => state.addTodoLoader));
+    return this._state$$.pipe(map(state => state.addTodoLoader));
   }
 
   private getTodosMap() {
-    return this._todosState$$.value.todos;
-  }
-
-  private patchState(stateSlice: Partial<TodosState>) {
-    this._todosState$$.next({
-      ...this._todosState$$.value,
-      ...stateSlice
-    })
+    return this._state$$.value.todos;
   }
 
   fetchAllTodos() {

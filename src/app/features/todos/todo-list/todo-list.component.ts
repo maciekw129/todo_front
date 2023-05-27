@@ -19,7 +19,7 @@ import { distinctUntilKeyChanged, tap } from 'rxjs';
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [MessageService, ConfirmationService]
+  providers: [MessageService, ConfirmationService, TodosStatefulService]
 })
 export default class TodoListComponent implements OnInit {
   private todosStatefulService = inject(TodosStatefulService);
@@ -64,7 +64,6 @@ export default class TodoListComponent implements OnInit {
   }
 
   handleCompleteTodoEvent(todoId: string) {
-    console.log('asdasd')
     this.todosStatefulService.completeTodoInState(todoId);
     this.showSuccessCompleteTodo();
   }
