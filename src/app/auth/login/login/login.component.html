@@ -5,6 +5,6 @@
         <ng-container *ngIf="authLoader$$ | async as authLoader">
             <app-loader class="mb-1" [loaderState]="authLoader"></app-loader>
         </ng-container>
-        <p class="text-sm">You don't have account? <a routerLink="/register">Sign up!</a></p>
+        <p class="text-sm">You don't have account? <a routerLink="/auth/register">Sign up!</a></p>
     </div>
 </div>

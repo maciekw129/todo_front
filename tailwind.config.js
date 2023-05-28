@@ -2,7 +2,12 @@
 module.exports = {
   content: ["./src/**/*.{html,ts}"],
   theme: {
-    extend: {},
+    fontFamily: {
+      'title': ['Kalam']
+    },
+    extend: {
+
+    },
   },
   plugins: [],
 }
