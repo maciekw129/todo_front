@@ -1,7 +1,7 @@
 <form class="flex flex-col items-center gap-3 p-4 w-full" [formGroup]="registerForm" (ngSubmit)="submitForm()">
     <app-text-input formControlName="email" label="E-mail" class="w-full"></app-text-input>
-    <app-text-input formControlName="password" label="Password"></app-text-input>
-    <app-text-input formControlName="confirmPassword" label="Confirm password"></app-text-input>
+    <app-text-input formControlName="password" label="Password" type="password"></app-text-input>
+    <app-text-input formControlName="confirmPassword" label="Confirm password" type="password"></app-text-input>
     <app-text-input formControlName="firstname" label="Firstname"></app-text-input>
     <app-text-input formControlName="lastname" label="Lastname"></app-text-input>
     <button class="w-min" pButton label="Register"></button>

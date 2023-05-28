@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginForm, LoginPayload } from '../../auth.interface';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { TextInputComponent } from 'src/app/shared/forms/text-input/text-input.component';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, InputTextModule, ButtonModule],
+  imports: [ReactiveFormsModule, NgIf, InputTextModule, ButtonModule, TextInputComponent],
   templateUrl: './login-form.component.html'
 })
 export class LoginFormComponent {
@@ -18,18 +19,14 @@ export class LoginFormComponent {
 
   loginForm = this.createForm();
 
-  get emailCtrl() {
-    return this.loginForm.controls.email;
-  }
-
-  get passwordCtrl() {
-    return this.loginForm.controls.password;
-  }
-
   private createForm() {
     return this.fb.group<LoginForm>({
-      email: this.fb.control(''),
-      password: this.fb.control('')
+      email: this.fb.control('', {
+        validators: Validators.required
+      }),
+      password: this.fb.control('', {
+        validators: Validators.required
+      })
     })
   }
 

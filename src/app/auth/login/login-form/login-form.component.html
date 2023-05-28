@@ -1,28 +1,6 @@
 <form class="flex flex-col items-center gap-3 p-4" [formGroup]="loginForm" (ngSubmit)="submitForm()">
-    <div class="field min-w-full">
-        <label for="email" class="block">E-mail</label>
-        <input id="email" formControlName="email" class="w-full" type="text" pInputText errorHandler />
-        <ng-container *ngIf="emailCtrl.touched">
-            <ng-container *ngIf="emailCtrl.errors as errors">
-                <small class="p-error block" *ngIf="errors['required']; else minLength">This field is required.</small>
-                <ng-template #minLength>
-
-                </ng-template>
-            </ng-container>
-        </ng-container>
-    </div>
-    <div class="field min-w-full">
-        <label for="password" class="block">Password</label>
-        <input id="password" formControlName="password" class="w-full" type="password" pInputText errorHandler />
-        <ng-container *ngIf="passwordCtrl.touched">
-            <ng-container *ngIf="passwordCtrl.errors as errors">
-                <small class="p-error block" *ngIf="errors['required']; else minLength">This field is required.</small>
-                <ng-template #minLength>
-
-                </ng-template>
-            </ng-container>
-        </ng-container>
-    </div>
+    <app-text-input formControlName="email" label="E-mail"></app-text-input>
+    <app-text-input formControlName="password" label="Password" type="password"></app-text-input>
 
     <button class="w-min" pButton label="Login"></button>
 </form>

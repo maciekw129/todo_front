@@ -20,7 +20,9 @@ import { OnInit } from '@angular/core';
 })
 export class TextInputComponent implements ControlValueAccessor, OnInit {
   @Input() label!: string;
+  @Input() type: string = "text";
   @Input() isDisabled: boolean = false;
+  @Input() formControlName: string = '';
 
   private injector = inject(Injector);
 

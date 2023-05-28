@@ -1,7 +1,7 @@
 <div class="field max-w-full">
-    <label for="text-input" class="block">{{ label }}</label>
-    <input id="text-input w-full" [formControl]="control" (input)="handleChange()" (blur)="onTouched()" class=" w-full"
-        type="text" pInputText errorHandler />
+    <label [for]="formControlName" class="block">{{ label }}</label>
+    <input [id]="formControlName" [formControl]="control" (input)="handleChange()" (blur)="onTouched()" class=" w-full"
+        [type]="type" pInputText errorHandler />
     <ng-container *ngIf="control.touched">
         <ng-container *ngIf="control.errors as errors">
             <small class="p-error block" *ngIf="errors['required']; else minLength">This field is required.</small>

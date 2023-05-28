@@ -10,7 +10,7 @@ export class AuthApiService {
   private API_URL = inject(API_URL);
   private http = inject(HttpClient);
 
-  private API_URL_AUTH = this.API_URL + 'auth/';
+  private readonly API_URL_AUTH = this.API_URL + 'auth/';
 
   login(loginPayload: LoginPayload) {
     return this.http.post<AuthorizationAPI>(this.API_URL_AUTH + 'login', loginPayload);

@@ -2,9 +2,9 @@
     <div class="bg-white p-8 w-full max-w-[400px] rounded flex items-center justify-center flex-col shadow">
         <h2 class="font-bold text-xl">Register</h2>
         <app-register-form (submitFormEvent)="register($event)" class="w-full"></app-register-form>
-        <!-- <ng-container *ngIf="authLoader$$ | async as authLoader">
+        <ng-container *ngIf="authLoader$$ | async as authLoader">
             <app-loader class="mb-1" [loaderState]="authLoader"></app-loader>
-        </ng-container> -->
+        </ng-container>
         <p class="text-sm">You already have account? <a routerLink="/auth">Sign in!</a></p>
     </div>
 </div>

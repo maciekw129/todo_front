@@ -1,38 +1,34 @@
 import { Injectable, inject } from '@angular/core';
 import { AuthApiService } from './auth-api.service';
-import { BehaviorSubject, map, of, tap } from 'rxjs';
+import { map, of, tap } from 'rxjs';
 import { AuthState, AuthorizationAPI, LoginPayload, RegisterPayload } from './auth.interface';
 import { TokenService } from './token.service';
+import { StatefulService } from '../shared/services/stateful-service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthStatefulService {
+export class AuthStatefulService extends StatefulService<AuthState> {
   private authApiService = inject(AuthApiService);
   private tokenService = inject(TokenService);
 
-  private _authState$$ = new BehaviorSubject<AuthState>({
-    userDetails: null,
-    authLoader: { status: "initial" }
-  });
+  constructor() {
+    super({
+      userDetails: null,
+      authLoader: { status: "initial" }
+    })
+  }
 
   get selectUserDetails$$() {
-    return this._authState$$.pipe(map(state => state.userDetails));
+    return this._state$$.pipe(map(state => state.userDetails));
   }
 
   get selectAuthLoader$$() {
-    return this._authState$$.pipe(map(state => state.authLoader));
+    return this._state$$.pipe(map(state => state.authLoader));
   }
 
   get isAuthorized$$() {
     return this.tokenService.token$$;
-  }
-
-  private patchState(stateSlice: Partial<AuthState>) {
-    this._authState$$.next({
-      ...this._authState$$.value,
-      ...stateSlice
-    })
   }
 
   private handleAuthSuccess(response: AuthorizationAPI) {
@@ -47,7 +43,7 @@ export class AuthStatefulService {
       tap({
       next: response => this.handleAuthSuccess(response),
       error: () => {
-        this.patchState({ authLoader: { status: "rejected", rejectedMessage: "Login failed." }});
+        this.patchState({ authLoader: { status: "rejected", rejectedMessage: "Provided credentials don't match with any account." }});
       }
     }))
   }
@@ -55,7 +51,7 @@ export class AuthStatefulService {
   handleRegister(registerPayload: RegisterPayload) {
     this.patchState({ authLoader: { status: "pending" }});
 
-    this.authApiService.register(registerPayload).pipe(
+    return this.authApiService.register(registerPayload).pipe(
       tap({
         next: response => this.handleAuthSuccess(response),
         error: () => {

@@ -53,6 +53,13 @@ export class RegisterFormComponent {
     this.registerForm.markAllAsTouched();
     if(this.registerForm.invalid) return;
 
-    this.submitFormEvent.emit(this.registerForm.getRawValue());
+    const { email, password, firstname, lastname } = this.registerForm.getRawValue();
+
+    this.submitFormEvent.emit({
+      email,
+      password,
+      firstname,
+      lastname
+    });
   }
 }
