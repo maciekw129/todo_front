@@ -1,27 +1,23 @@
 import { Injectable, inject } from '@angular/core';
 import { TodosAPIService } from '../todos-api.service';
-import { BehaviorSubject, map } from 'rxjs';
+import { map } from 'rxjs';
 import { TodoState } from '../todos.interface';
+import { StatefulService } from 'src/app/shared/services/stateful-service';
 
 @Injectable()
 
-export class TodoStatefulService {
+export class TodoStatefulService extends StatefulService<TodoState> {
   private todosApiService = inject(TodosAPIService);
 
-  private _todoState$$ = new BehaviorSubject<TodoState>({
-    deleteTodoLoader: { status: 'initial' },
-    completeTodoLoader: { status: 'initial' }
-  })
-
-  get todoState$$() {
-    return this._todoState$$.asObservable();
+  constructor() {
+    super({
+      deleteTodoLoader: { status: 'initial' },
+      completeTodoLoader: { status: 'initial' }
+    })
   }
 
-  private patchState(stateSlice: Partial<TodoState>) {
-    this._todoState$$.next({
-      ...this._todoState$$.value,
-      ...stateSlice
-    })
+  get todoState$$() {
+    return this._state$$.asObservable();
   }
 
   selectDeleteTodoLoader() {

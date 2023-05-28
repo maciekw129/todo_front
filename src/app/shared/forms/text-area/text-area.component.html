@@ -1,0 +1,6 @@
+<div class="field max-w-full">
+    <label [for]="formControlName" class="block">{{ label }}</label>
+    <textarea [id]="formControlName" [formControl]="control" class="w-full" [rows]="rows" [cols]="cols"
+            pInputTextarea errorHandler></textarea>
+    <app-errors-template [control]="control"></app-errors-template>
+</div>

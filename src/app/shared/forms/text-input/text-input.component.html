@@ -1,38 +1,6 @@
 <div class="field max-w-full">
     <label [for]="formControlName" class="block">{{ label }}</label>
-    <input [id]="formControlName" [formControl]="control" (input)="handleChange()" (blur)="onTouched()" class=" w-full"
-        [type]="type" pInputText errorHandler />
-    <ng-container *ngIf="control.touched">
-        <ng-container *ngIf="control.errors as errors">
-            <small class="p-error block" *ngIf="errors['required']; else minLength">This field is required.</small>
-            <ng-template #minLength>
-                <small class="p-error block" *ngIf="errors['minlength'] as error; else maxLength">Name must have at
-                    least
-                    {{ error.requiredLength }} characters.</small>
-            </ng-template>
-            <ng-template #maxLength>
-                <small class="p-error block" *ngIf="errors['maxlength'] as error; else emailPattern">Name can have max.
-                    {{
-                    error.requiredLength }}</small>
-            </ng-template>
-            <ng-template #emailPattern>
-                <small class="p-error block" *ngIf="errors['emailPattern'] as error; else passwordPattern">Format should
-                    be:
-                    name@domain.tld</small>
-            </ng-template>
-            <ng-template #passwordPattern>
-                <small class="p-error block" *ngIf="errors['passwordPattern'] as error; else confirmPassword">Password
-                    must
-                    have at least 8
-                    characters</small>
-            </ng-template>
-            <ng-template #confirmPassword>
-                <small class="p-error block" *ngIf="errors['confirmPassword'] as error; else extraError">Passwords don't
-                    match</small>
-            </ng-template>
-            <ng-template #extraError>
-                <ng-content></ng-content>
-            </ng-template>
-        </ng-container>
-    </ng-container>
+    <input [id]="formControlName" [formControl]="control" (input)="handleChange()"
+        (blur)="onTouched()" class=" w-full" [type]="type" pInputText errorHandler />
+    <app-errors-template [control]="control"></app-errors-template>
 </div>

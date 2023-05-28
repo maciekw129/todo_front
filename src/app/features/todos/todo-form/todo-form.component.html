@@ -1,43 +1,8 @@
 <form [formGroup]="todoForm" (ngSubmit)="submitForm()"
     class="p-4 flex flex-col gap-y-4 w-full max-w-md items-center justify-center m-auto">
-    <div class="field min-w-full">
-        <label for="todo-name" class="block">Name</label>
-        <input id="todo-name" formControlName="todoName" class="w-full" type="text" pInputText errorHandler />
-        <ng-container *ngIf="todoNameCtrl.touched">
-            <ng-container *ngIf="todoNameCtrl.errors as errors">
-                <small class="p-error block" *ngIf="errors['required']; else minLength">This field is required.</small>
-                <ng-template #minLength>
-                    <small class="p-error block" *ngIf="errors['minlength'] as error; else maxLength">Name must have at
-                        least
-                        {{ error.requiredLength }} characters.</small>
-                </ng-template>
-                <ng-template #maxLength>
-                    <small class="p-error block" *ngIf="errors['maxlength'] as error">Name can have max. {{
-                        error.requiredLength }}</small>
-                </ng-template>
-            </ng-container>
-        </ng-container>
-    </div>
+    <app-text-input formControlName="todoName" label="Todo name"></app-text-input>
 
-    <div class="field min-w-full">
-        <label for="todo-description" class="block">Description</label>
-        <textarea id="todo-description" formControlName="todoDescription" class="w-full" rows="5" cols="30"
-            pInputTextarea errorHandler></textarea>
-        <ng-container *ngIf="todoDescriptionCtrl.touched">
-            <ng-container *ngIf="todoDescriptionCtrl.errors as errors">
-                <small class="p-error block" *ngIf="errors['required']; else minLength">This field is required.</small>
-                <ng-template #minLength>
-                    <small class="p-error block" *ngIf="errors['minlength'] as error; else maxLength">Name must have at
-                        least
-                        {{ error.requiredLength }} characters.</small>
-                </ng-template>
-                <ng-template #maxLength>
-                    <small class="p-error block" *ngIf="errors['maxlength'] as error">Name can have max. {{
-                        error.requiredLength }}</small>
-                </ng-template>
-            </ng-container>
-        </ng-container>
-    </div>
+    <app-text-area formControlName="todoDescription" label="Description"></app-text-area>
     <button pButton label="Send" [disabled]="loaderState.status === 'pending' || todoForm.invalid"></button>
 
     <app-loader [loaderState]="loaderState"></app-loader>
