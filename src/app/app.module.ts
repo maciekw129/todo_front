@@ -27,12 +27,7 @@ import { TokenInterceptor } from './auth/interceptors/tokenInterceptor';
       {
         path: 'auth',
         canActivate: [hasAuthGuard],
-        loadComponent: () => import('./auth/login/login/login.component')
-      },
-      {
-        path: 'register',
-        canActivate: [hasAuthGuard],
-        loadComponent: () => import('./auth/register/register/register.component')
+        loadChildren: () => import('./auth/auth-routing.module')
       }
     ]),
     HttpClientModule
